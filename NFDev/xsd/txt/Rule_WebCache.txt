@@ -1,0 +1,25 @@
+Rule_0:
+
+(( send(n_WebCache,n_0,p_0,t_0) && isInternal(p_0.IP_DST)) ==> 
+	 E(n_1, p_1, t_1 | 
+		( recv(n_1,n_WebCache,p_1,t_1) && (t_1 < t_0) && isInternal(p_1.IP_SRC) && (p_1.APPLICATION_PROTOCOL == HTTP_REQUEST) &&  E(n_2, p_2, t_2 | 
+			( recv(n_2,n_WebCache,p_2,t_2) && (t_2 < t_1) && !(isInternal(p_2.IP_SRC)) && (p_1.L7DATA == p_2.L7DATA) && (p_0.L7DATA == p_2.L7DATA))) && (p_0.IP_DST == p_1.IP_SRC) && (p_0.IP_SRC == p_1.IP_DST) && (p_0.PORT_DST == p_1.PORT_SRC) && (p_0.PORT_SRC == p_1.PORT_DST) && (p_0.APPLICATION_PROTOCOL == HTTP_RESPONSE) && (p_0.TRANSPORT_PROTOCOL == p_1.TRANSPORT_PROTOCOL))))
+
+Rule_1:
+
+(( send(n_WebCache,n_0,p_0,t_0) && !(isInternal(p_0.IP_DST))) ==> 
+	 E(n_1, p_1, t_1 | 
+		( recv(n_1,n_WebCache,p_1,t_1) && (t_1 < t_0) && isInternal(p_1.IP_SRC) && (p_0.IP_SRC == p_1.IP_SRC) && (p_0.IP_DST == p_1.IP_DST) && (p_0.PORT_SRC == p_1.PORT_SRC) && (p_0.PORT_DST == p_1.PORT_DST) && (p_0.TRANSPORT_PROTOCOL == p_1.TRANSPORT_PROTOCOL) && (p_0.APPLICATION_PROTOCOL == p_1.APPLICATION_PROTOCOL) && (p_0.L7DATA == p_1.L7DATA))))
+
+Rule_2:
+
+(( send(n_WebCache,n_0,p_0,t_0) && isInternal(p_0.IP_DST)) ==> 
+	 E(n_1, p_1, t_1 | 
+		( recv(n_1,n_WebCache,p_1,t_1) && (t_1 < t_0) && !(isInternal(p_1.IP_SRC)) && (p_1.APPLICATION_PROTOCOL == HTTP_RESPONSE) && (p_0.IP_SRC == p_1.IP_SRC) && (p_0.IP_DST == p_1.IP_DST) && (p_0.PORT_SRC == p_1.PORT_SRC) && (p_0.PORT_DST == p_1.PORT_DST) && (p_0.TRANSPORT_PROTOCOL == p_1.TRANSPORT_PROTOCOL) && (p_0.APPLICATION_PROTOCOL == p_1.APPLICATION_PROTOCOL) && (p_0.L7DATA == p_1.L7DATA))))
+
+Rule_3:
+
+(( send(n_WebCache,n_0,p_0,t_0) && isInternal(p_0.IP_DST)) ==> 
+	 E(n_1, p_1, t_1 | 
+		( recv(n_1,n_WebCache,p_1,t_1) && (t_1 < t_0) && !(isInternal(p_1.IP_SRC)) && (p_0.IP_SRC == p_1.IP_SRC) && (p_0.IP_DST == p_1.IP_DST) && (p_0.PORT_SRC == p_1.PORT_SRC) && (p_0.PORT_DST == p_1.PORT_DST) && (p_0.TRANSPORT_PROTOCOL == p_1.TRANSPORT_PROTOCOL) && (p_0.APPLICATION_PROTOCOL == p_1.APPLICATION_PROTOCOL) && (p_0.L7DATA == p_1.L7DATA))))
+

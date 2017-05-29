@@ -1,0 +1,141 @@
+package it.polito.nfdev.nat;
+
+import java.util.Date;
+import java.util.List;
+
+import it.polito.nfdev.lib.Interface;
+import it.polito.nfdev.lib.NetworkFunction;
+import it.polito.nfdev.lib.Packet;
+import it.polito.nfdev.lib.Packet.PacketField;
+import it.polito.nfdev.lib.RoutingResult.Action;
+import it.polito.nfdev.lib.TableEntry;
+import it.polito.nfdev.verification.Configuration;
+import it.polito.nfdev.verification.Table;
+import it.polito.nfdev.verification.Verifier;
+import it.polito.nfdev.verification.Verifier.PacketType;
+import it.polito.nfdev.verification.Verifier.State.Entry;
+import it.polito.nfdev.lib.RoutingResult;
+
+public class Nat extends NetworkFunction {
+	
+	private final Integer TIMEOUT; // in seconds
+	
+	@Table(fields = {"INTERNAL_IP", "INTERNAL_PORT", "EXTERNAL_IP", "EXTERNAL_PORT"})
+	private NatTable natTable;
+	
+	private PortPool portPool;
+	private Interface internalFace;
+	private Interface externalFace;
+	@Configuration
+	private String natIp;
+	
+	public Nat(List<Interface> interfaces, String natIp, Integer timeout) {
+		super(interfaces);
+		assert interfaces.size() == 2;
+		assert timeout > 0;
+		assert natIp != null && !natIp.isEmpty();
+		internalFace = null;
+		externalFace = null;
+		for(Interface i : interfaces)
+		{
+			if(i.getAttributes().contains(Interface.INTERNAL_ATTR))
+				internalFace = i;
+			if(i.getAttributes().contains(Interface.EXTERNAL_ATTR))
+				externalFace = i;
+		}
+		assert internalFace != null;
+		assert externalFace != null;
+		assert internalFace.getId() != externalFace.getId();
+		this.natTable = new NatTable(4, 1);
+		this.natIp = natIp;
+		this.portPool = new PortPool(10000, 1024); // starting port, # of ports
+		this.TIMEOUT = timeout;
+	}
+
+	@Override
+	public RoutingResult onReceivedPacket(Packet packet, Interface iface) {
+		Packet packet_in = null;
+		try {
+			packet_in = packet.clone();
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+			return new RoutingResult(Action.DROP, null, null); 
+		}
+		if(iface.getAttributes().contains(Interface.INTERNAL_ATTR))
+		{
+			// Packet coming from the internal network
+			Verifier.Packet.satisfy(PacketType.PACKET_IN, Verifier.EXPR.FROM_INTERNAL);
+			TableEntry entry = natTable.matchEntry(packet_in.getField(PacketField.IP_SRC), packet_in.getField(PacketField.PORT_SRC), Verifier.ANY_VALUE, Verifier.ANY_VALUE);
+			if(entry != null)
+			{
+				// We already have a mapping for this connection
+				//Entry stEntry = Verifier.State.Table.matchEntry(packet_in.getField(PacketField.IP_SRC), packet_in.getField(PacketField.PORT_SRC), Verifier.ANY_VALUE, Verifier.ANY_VALUE);
+				//Verifier.Packet.setPacketField(PacketType.PACKET_OUT, PacketField.IP_SRC, stEntry.getField(2));
+				//Verifier.Packet.setPacketField(PacketType.PACKET_OUT, PacketField.PORT_SRC, stEntry.getField(3));
+				
+				packet_in.setField(PacketField.IP_SRC, (String)entry.getValue(2));
+				packet_in.setField(PacketField.PORT_SRC, (String)entry.getValue(3));
+				((NatTableEntry)entry).setTimestamp(new Date());
+				Verifier.Network.sendPacket(Verifier.EXPR.TO_EXTERNAL);
+				return new RoutingResult(Action.FORWARD, packet_in, externalFace);
+			}
+			else
+			{
+				Verifier.State.notMatchPacket(packet_in.getField(PacketField.IP_SRC), packet_in.getField(PacketField.PORT_SRC));
+				Integer new_port = portPool.getAvailablePort();
+				if(new_port == null)
+					return new RoutingResult(Action.DROP, null, null);	// No available ports, discard new connections
+				TableEntry e = new NatTableEntry(5);
+				e.setValue(0, packet_in.getField(PacketField.IP_SRC));
+				e.setValue(1, packet_in.getField(PacketField.PORT_SRC));
+				e.setValue(2, natIp);
+				e.setValue(3, String.valueOf(new_port));
+				e.setValue(4, new Date());
+				Verifier.State.Table.storeEntry(packet_in.getField(PacketField.IP_SRC), 
+												packet_in.getField(PacketField.PORT_SRC),
+												natIp,
+												Verifier.ANY_VALUE);
+				packet_in.setField(PacketField.IP_SRC, natIp);
+				packet_in.setField(PacketField.PORT_SRC, String.valueOf(new_port));
+				
+				Verifier.Packet.setPacketField(PacketType.PACKET_OUT, PacketField.IP_SRC, natIp);
+				Verifier.Packet.setPacketField(PacketType.PACKET_OUT, PacketField.PORT_SRC, Verifier.ANY_VALUE);
+				natTable.storeEntry(e);
+				Verifier.Network.sendPacket(Verifier.EXPR.TO_EXTERNAL);
+				return new RoutingResult(Action.FORWARD, packet_in, externalFace);
+			}
+		}
+		else
+		{
+			// Packet coming from the external network
+			Verifier.Packet.satisfy(PacketType.PACKET_IN, Verifier.EXPR.FROM_EXTERNAL);
+			TableEntry entry = natTable.matchEntry(Verifier.ANY_VALUE, Verifier.ANY_VALUE, packet_in.getField(PacketField.IP_DST), packet_in.getField(PacketField.PORT_DST));
+			//ConnectionDescriptor descriptor = natTable.get(new NatEntryOld(packet.getField(PacketField.IP_DST), packet.getField(PacketField.PORT_DST)));
+			if(entry == null)
+				return new RoutingResult(Action.DROP, null, null);
+			Entry stEntry = Verifier.State.Table.matchEntry(Verifier.ANY_VALUE, Verifier.ANY_VALUE, packet_in.getField(PacketField.IP_SRC), packet_in.getField(PacketField.PORT_SRC));
+			Verifier.Packet.setPacketField(PacketType.PACKET_OUT, PacketField.IP_DST, stEntry.getField(0));
+			Verifier.Packet.setPacketField(PacketType.PACKET_OUT, PacketField.PORT_DST, stEntry.getField(1));
+			// Here we should implement more checks (paranoid NAT):
+			// 	- the packet origin (source ip/port) is the allowed one
+			packet_in.setField(PacketField.IP_DST, (String) entry.getValue(0));
+			packet_in.setField(PacketField.PORT_DST, (String) entry.getValue(1));
+			((NatTableEntry)entry).setTimestamp(new Date());
+			Verifier.Network.sendPacket(Verifier.EXPR.TO_INTERNAL);
+			return new RoutingResult(Action.FORWARD, packet_in, internalFace);
+		}
+	}
+	
+	public void reset() {
+		this.natTable.clear();
+	}
+	
+	public void checkForTimeout() {
+		natTable.checkForTimeout(TIMEOUT);
+	}
+	
+	public void printNatTable() {
+		System.out.println(natTable);
+	}
+
+}

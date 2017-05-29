@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project basedir="." default="generate-bindings" name="NFDev-ClassGen">
+	<description>
+			Script for generating jaxb logical expression classes
+	</description>
+
+	<property name="nfdev.location" location="." />
+	<property name="src.dir" location="${nfdev.location}/src" />
+	<property name="build.dir" location="${nfdev.location}/build" />
+	<property name="lib.dir" location="${nfdev.location}/lib" />
+	<property name="gen.dir" location="${nfdev.location}/generated" />
+	<property name="schema.dir" location="${nfdev.location}/xsd" />
+
+
+	<!-- Target init -->
+	<target name="init">
+		<!--mkdir dir="${build.dir}" /-->
+		<mkdir dir="${gen.dir}" />
+	</target>
+
+	<!-- Target chk-bindings -->
+	<target name="-chk-bindings">
+		<uptodate property="generate-bindings.notRequired" targetfile="${gen.dir}/.flagfile">
+			<srcfiles dir="${schema.dir}" includes="**/*.xsd" />
+		</uptodate>
+	</target>
+
+	<!-- Target generate-bindings -->
+	<target name="generate-bindings" unless="generate-bindings.notRequired" depends="init,-chk-bindings">
+		<exec executable="xjc" failonerror="true" >
+			<arg value="-d" />
+			<arg value="${gen.dir}" />
+			<arg value="-p" />
+			<arg value="it.polito.nfdev.jaxb" />
+			<arg value="${schema.dir}/LogicalExpressions.xsd" />
+		</exec>
+		<touch file="${gen.dir}/.flagfile" />
+	</target>
+
+	<!-- Target clean -->
+	<target name="clean" description="Clean all">
+		<!--delete dir="${build.dir}" /-->
+		<delete dir="${gen.dir}" />
+	</target>
+
+</project>

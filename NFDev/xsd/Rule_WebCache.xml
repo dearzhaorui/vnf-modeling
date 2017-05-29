@@ -1,0 +1,799 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Result xmlns="http://www.example.org/LogicalExpressions" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.example.org/LogicalExpressions LogicalExpressions.xsd">
+    <TableSize>0</TableSize>
+    <DataDriven>true</DataDriven>
+    <Node Name="n_0"/>
+    <Node Name="n_1"/>
+    <Node Name="n_2"/>
+    <Node Name="n_WebCache"/>
+    <Packet Name="p_0"/>
+    <Packet Name="p_1"/>
+    <Packet Name="p_2"/>
+    <Time Name="t_0"/>
+    <Time Name="t_1"/>
+    <Time Name="t_2"/>
+    <LogicalExpressionResult>
+        <Implies>
+            <AntecedentExpression>
+                <And>
+                    <Expression>
+                        <Send>
+                            <Source>n_WebCache</Source>
+                            <Destination>n_0</Destination>
+                            <Packet_out>p_0</Packet_out>
+                            <Time_out>t_0</Time_out>
+                        </Send>
+                    </Expression>
+                    <Expression>
+                        <IsInternal>
+                            <FieldOf>
+<Unit>p_0</Unit>
+<Field>IP_DST</Field>
+                            </FieldOf>
+                        </IsInternal>
+                    </Expression>
+                </And>
+            </AntecedentExpression>
+            <ConsequentExpression>
+                <Exist>
+                    <Unit>n_1</Unit>
+                    <Unit>p_1</Unit>
+                    <Unit>t_1</Unit>
+                    <Expression>
+                        <And>
+                            <Expression>
+<Recv>
+    <Source>n_1</Source>
+    <Destination>n_WebCache</Destination>
+    <Packet_in>p_1</Packet_in>
+    <Time_in>t_1</Time_in>
+</Recv>
+                            </Expression>
+                            <Expression>
+<LessThan>
+    <LeftExpression>
+        <Param>t_1</Param>
+    </LeftExpression>
+    <RightExpression>
+        <Param>t_0</Param>
+    </RightExpression>
+</LessThan>
+                            </Expression>
+                            <Expression>
+<IsInternal>
+    <FieldOf>
+        <Unit>p_1</Unit>
+        <Field>IP_SRC</Field>
+    </FieldOf>
+</IsInternal>
+                            </Expression>
+                            <Expression>
+<Equal>
+    <LeftExpression>
+        <FieldOf>
+            <Unit>p_1</Unit>
+            <Field>APPLICATION_PROTOCOL</Field>
+        </FieldOf>
+    </LeftExpression>
+    <RightExpression>
+        <Param>HTTP_REQUEST</Param>
+    </RightExpression>
+</Equal>
+                            </Expression>
+                            <Expression>
+<Exist>
+    <Unit>n_2</Unit>
+    <Unit>p_2</Unit>
+    <Unit>t_2</Unit>
+    <Expression>
+        <And>
+            <Expression>
+                <Recv>
+                    <Source>n_2</Source>
+                    <Destination>n_WebCache</Destination>
+                    <Packet_in>p_2</Packet_in>
+                    <Time_in>t_2</Time_in>
+                </Recv>
+            </Expression>
+            <Expression>
+                <LessThan>
+                    <LeftExpression>
+                        <Param>t_2</Param>
+                    </LeftExpression>
+                    <RightExpression>
+                        <Param>t_1</Param>
+                    </RightExpression>
+                </LessThan>
+            </Expression>
+            <Expression>
+                <Not>
+                    <Expression>
+                        <IsInternal>
+                            <FieldOf>
+<Unit>p_2</Unit>
+<Field>IP_SRC</Field>
+                            </FieldOf>
+                        </IsInternal>
+                    </Expression>
+                </Not>
+            </Expression>
+            <Expression>
+                <Equal>
+                    <LeftExpression>
+                        <FieldOf>
+                            <Unit>p_1</Unit>
+                            <Field>L7DATA</Field>
+                        </FieldOf>
+                    </LeftExpression>
+                    <RightExpression>
+                        <FieldOf>
+                            <Unit>p_2</Unit>
+                            <Field>L7DATA</Field>
+                        </FieldOf>
+                    </RightExpression>
+                </Equal>
+            </Expression>
+            <Expression>
+                <Equal>
+                    <LeftExpression>
+                        <FieldOf>
+                            <Unit>p_0</Unit>
+                            <Field>L7DATA</Field>
+                        </FieldOf>
+                    </LeftExpression>
+                    <RightExpression>
+                        <FieldOf>
+                            <Unit>p_2</Unit>
+                            <Field>L7DATA</Field>
+                        </FieldOf>
+                    </RightExpression>
+                </Equal>
+            </Expression>
+        </And>
+    </Expression>
+</Exist>
+                            </Expression>
+                            <Expression>
+<Equal>
+    <LeftExpression>
+        <FieldOf>
+            <Unit>p_0</Unit>
+            <Field>IP_DST</Field>
+        </FieldOf>
+    </LeftExpression>
+    <RightExpression>
+        <FieldOf>
+            <Unit>p_1</Unit>
+            <Field>IP_SRC</Field>
+        </FieldOf>
+    </RightExpression>
+</Equal>
+                            </Expression>
+                            <Expression>
+<Equal>
+    <LeftExpression>
+        <FieldOf>
+            <Unit>p_0</Unit>
+            <Field>IP_SRC</Field>
+        </FieldOf>
+    </LeftExpression>
+    <RightExpression>
+        <FieldOf>
+            <Unit>p_1</Unit>
+            <Field>IP_DST</Field>
+        </FieldOf>
+    </RightExpression>
+</Equal>
+                            </Expression>
+                            <Expression>
+<Equal>
+    <LeftExpression>
+        <FieldOf>
+            <Unit>p_0</Unit>
+            <Field>PORT_DST</Field>
+        </FieldOf>
+    </LeftExpression>
+    <RightExpression>
+        <FieldOf>
+            <Unit>p_1</Unit>
+            <Field>PORT_SRC</Field>
+        </FieldOf>
+    </RightExpression>
+</Equal>
+                            </Expression>
+                            <Expression>
+<Equal>
+    <LeftExpression>
+        <FieldOf>
+            <Unit>p_0</Unit>
+            <Field>PORT_SRC</Field>
+        </FieldOf>
+    </LeftExpression>
+    <RightExpression>
+        <FieldOf>
+            <Unit>p_1</Unit>
+            <Field>PORT_DST</Field>
+        </FieldOf>
+    </RightExpression>
+</Equal>
+                            </Expression>
+                            <Expression>
+<Equal>
+    <LeftExpression>
+        <FieldOf>
+            <Unit>p_0</Unit>
+            <Field>APPLICATION_PROTOCOL</Field>
+        </FieldOf>
+    </LeftExpression>
+    <RightExpression>
+        <Param>HTTP_RESPONSE</Param>
+    </RightExpression>
+</Equal>
+                            </Expression>
+                            <Expression>
+<Equal>
+    <LeftExpression>
+        <FieldOf>
+            <Unit>p_0</Unit>
+            <Field>TRANSPORT_PROTOCOL</Field>
+        </FieldOf>
+    </LeftExpression>
+    <RightExpression>
+        <FieldOf>
+            <Unit>p_1</Unit>
+            <Field>TRANSPORT_PROTOCOL</Field>
+        </FieldOf>
+    </RightExpression>
+</Equal>
+                            </Expression>
+                        </And>
+                    </Expression>
+                </Exist>
+            </ConsequentExpression>
+        </Implies>
+    </LogicalExpressionResult>
+    <LogicalExpressionResult>
+        <Implies>
+            <AntecedentExpression>
+                <And>
+                    <Expression>
+                        <Send>
+                            <Source>n_WebCache</Source>
+                            <Destination>n_0</Destination>
+                            <Packet_out>p_0</Packet_out>
+                            <Time_out>t_0</Time_out>
+                        </Send>
+                    </Expression>
+                    <Expression>
+                        <Not>
+                            <Expression>
+<IsInternal>
+    <FieldOf>
+        <Unit>p_0</Unit>
+        <Field>IP_DST</Field>
+    </FieldOf>
+</IsInternal>
+                            </Expression>
+                        </Not>
+                    </Expression>
+                </And>
+            </AntecedentExpression>
+            <ConsequentExpression>
+                <Exist>
+                    <Unit>n_1</Unit>
+                    <Unit>p_1</Unit>
+                    <Unit>t_1</Unit>
+                    <Expression>
+                        <And>
+                            <Expression>
+<Recv>
+    <Source>n_1</Source>
+    <Destination>n_WebCache</Destination>
+    <Packet_in>p_1</Packet_in>
+    <Time_in>t_1</Time_in>
+</Recv>
+                            </Expression>
+                            <Expression>
+<LessThan>
+    <LeftExpression>
+        <Param>t_1</Param>
+    </LeftExpression>
+    <RightExpression>
+        <Param>t_0</Param>
+    </RightExpression>
+</LessThan>
+                            </Expression>
+                            <Expression>
+<IsInternal>
+    <FieldOf>
+        <Unit>p_1</Unit>
+        <Field>IP_SRC</Field>
+    </FieldOf>
+</IsInternal>
+                            </Expression>
+                            <Expression>
+<Equal>
+    <LeftExpression>
+        <FieldOf>
+            <Unit>p_0</Unit>
+            <Field>IP_SRC</Field>
+        </FieldOf>
+    </LeftExpression>
+    <RightExpression>
+        <FieldOf>
+            <Unit>p_1</Unit>
+            <Field>IP_SRC</Field>
+        </FieldOf>
+    </RightExpression>
+</Equal>
+                            </Expression>
+                            <Expression>
+<Equal>
+    <LeftExpression>
+        <FieldOf>
+            <Unit>p_0</Unit>
+            <Field>IP_DST</Field>
+        </FieldOf>
+    </LeftExpression>
+    <RightExpression>
+        <FieldOf>
+            <Unit>p_1</Unit>
+            <Field>IP_DST</Field>
+        </FieldOf>
+    </RightExpression>
+</Equal>
+                            </Expression>
+                            <Expression>
+<Equal>
+    <LeftExpression>
+        <FieldOf>
+            <Unit>p_0</Unit>
+            <Field>PORT_SRC</Field>
+        </FieldOf>
+    </LeftExpression>
+    <RightExpression>
+        <FieldOf>
+            <Unit>p_1</Unit>
+            <Field>PORT_SRC</Field>
+        </FieldOf>
+    </RightExpression>
+</Equal>
+                            </Expression>
+                            <Expression>
+<Equal>
+    <LeftExpression>
+        <FieldOf>
+            <Unit>p_0</Unit>
+            <Field>PORT_DST</Field>
+        </FieldOf>
+    </LeftExpression>
+    <RightExpression>
+        <FieldOf>
+            <Unit>p_1</Unit>
+            <Field>PORT_DST</Field>
+        </FieldOf>
+    </RightExpression>
+</Equal>
+                            </Expression>
+                            <Expression>
+<Equal>
+    <LeftExpression>
+        <FieldOf>
+            <Unit>p_0</Unit>
+            <Field>TRANSPORT_PROTOCOL</Field>
+        </FieldOf>
+    </LeftExpression>
+    <RightExpression>
+        <FieldOf>
+            <Unit>p_1</Unit>
+            <Field>TRANSPORT_PROTOCOL</Field>
+        </FieldOf>
+    </RightExpression>
+</Equal>
+                            </Expression>
+                            <Expression>
+<Equal>
+    <LeftExpression>
+        <FieldOf>
+            <Unit>p_0</Unit>
+            <Field>APPLICATION_PROTOCOL</Field>
+        </FieldOf>
+    </LeftExpression>
+    <RightExpression>
+        <FieldOf>
+            <Unit>p_1</Unit>
+            <Field>APPLICATION_PROTOCOL</Field>
+        </FieldOf>
+    </RightExpression>
+</Equal>
+                            </Expression>
+                            <Expression>
+<Equal>
+    <LeftExpression>
+        <FieldOf>
+            <Unit>p_0</Unit>
+            <Field>L7DATA</Field>
+        </FieldOf>
+    </LeftExpression>
+    <RightExpression>
+        <FieldOf>
+            <Unit>p_1</Unit>
+            <Field>L7DATA</Field>
+        </FieldOf>
+    </RightExpression>
+</Equal>
+                            </Expression>
+                        </And>
+                    </Expression>
+                </Exist>
+            </ConsequentExpression>
+        </Implies>
+    </LogicalExpressionResult>
+    <LogicalExpressionResult>
+        <Implies>
+            <AntecedentExpression>
+                <And>
+                    <Expression>
+                        <Send>
+                            <Source>n_WebCache</Source>
+                            <Destination>n_0</Destination>
+                            <Packet_out>p_0</Packet_out>
+                            <Time_out>t_0</Time_out>
+                        </Send>
+                    </Expression>
+                    <Expression>
+                        <IsInternal>
+                            <FieldOf>
+<Unit>p_0</Unit>
+<Field>IP_DST</Field>
+                            </FieldOf>
+                        </IsInternal>
+                    </Expression>
+                </And>
+            </AntecedentExpression>
+            <ConsequentExpression>
+                <Exist>
+                    <Unit>n_1</Unit>
+                    <Unit>p_1</Unit>
+                    <Unit>t_1</Unit>
+                    <Expression>
+                        <And>
+                            <Expression>
+<Recv>
+    <Source>n_1</Source>
+    <Destination>n_WebCache</Destination>
+    <Packet_in>p_1</Packet_in>
+    <Time_in>t_1</Time_in>
+</Recv>
+                            </Expression>
+                            <Expression>
+<LessThan>
+    <LeftExpression>
+        <Param>t_1</Param>
+    </LeftExpression>
+    <RightExpression>
+        <Param>t_0</Param>
+    </RightExpression>
+</LessThan>
+                            </Expression>
+                            <Expression>
+<Not>
+    <Expression>
+        <IsInternal>
+            <FieldOf>
+                <Unit>p_1</Unit>
+                <Field>IP_SRC</Field>
+            </FieldOf>
+        </IsInternal>
+    </Expression>
+</Not>
+                            </Expression>
+                            <Expression>
+<Equal>
+    <LeftExpression>
+        <FieldOf>
+            <Unit>p_1</Unit>
+            <Field>APPLICATION_PROTOCOL</Field>
+        </FieldOf>
+    </LeftExpression>
+    <RightExpression>
+        <Param>HTTP_RESPONSE</Param>
+    </RightExpression>
+</Equal>
+                            </Expression>
+                            <Expression>
+<Equal>
+    <LeftExpression>
+        <FieldOf>
+            <Unit>p_0</Unit>
+            <Field>IP_SRC</Field>
+        </FieldOf>
+    </LeftExpression>
+    <RightExpression>
+        <FieldOf>
+            <Unit>p_1</Unit>
+            <Field>IP_SRC</Field>
+        </FieldOf>
+    </RightExpression>
+</Equal>
+                            </Expression>
+                            <Expression>
+<Equal>
+    <LeftExpression>
+        <FieldOf>
+            <Unit>p_0</Unit>
+            <Field>IP_DST</Field>
+        </FieldOf>
+    </LeftExpression>
+    <RightExpression>
+        <FieldOf>
+            <Unit>p_1</Unit>
+            <Field>IP_DST</Field>
+        </FieldOf>
+    </RightExpression>
+</Equal>
+                            </Expression>
+                            <Expression>
+<Equal>
+    <LeftExpression>
+        <FieldOf>
+            <Unit>p_0</Unit>
+            <Field>PORT_SRC</Field>
+        </FieldOf>
+    </LeftExpression>
+    <RightExpression>
+        <FieldOf>
+            <Unit>p_1</Unit>
+            <Field>PORT_SRC</Field>
+        </FieldOf>
+    </RightExpression>
+</Equal>
+                            </Expression>
+                            <Expression>
+<Equal>
+    <LeftExpression>
+        <FieldOf>
+            <Unit>p_0</Unit>
+            <Field>PORT_DST</Field>
+        </FieldOf>
+    </LeftExpression>
+    <RightExpression>
+        <FieldOf>
+            <Unit>p_1</Unit>
+            <Field>PORT_DST</Field>
+        </FieldOf>
+    </RightExpression>
+</Equal>
+                            </Expression>
+                            <Expression>
+<Equal>
+    <LeftExpression>
+        <FieldOf>
+            <Unit>p_0</Unit>
+            <Field>TRANSPORT_PROTOCOL</Field>
+        </FieldOf>
+    </LeftExpression>
+    <RightExpression>
+        <FieldOf>
+            <Unit>p_1</Unit>
+            <Field>TRANSPORT_PROTOCOL</Field>
+        </FieldOf>
+    </RightExpression>
+</Equal>
+                            </Expression>
+                            <Expression>
+<Equal>
+    <LeftExpression>
+        <FieldOf>
+            <Unit>p_0</Unit>
+            <Field>APPLICATION_PROTOCOL</Field>
+        </FieldOf>
+    </LeftExpression>
+    <RightExpression>
+        <FieldOf>
+            <Unit>p_1</Unit>
+            <Field>APPLICATION_PROTOCOL</Field>
+        </FieldOf>
+    </RightExpression>
+</Equal>
+                            </Expression>
+                            <Expression>
+<Equal>
+    <LeftExpression>
+        <FieldOf>
+            <Unit>p_0</Unit>
+            <Field>L7DATA</Field>
+        </FieldOf>
+    </LeftExpression>
+    <RightExpression>
+        <FieldOf>
+            <Unit>p_1</Unit>
+            <Field>L7DATA</Field>
+        </FieldOf>
+    </RightExpression>
+</Equal>
+                            </Expression>
+                        </And>
+                    </Expression>
+                </Exist>
+            </ConsequentExpression>
+        </Implies>
+    </LogicalExpressionResult>
+    <LogicalExpressionResult>
+        <Implies>
+            <AntecedentExpression>
+                <And>
+                    <Expression>
+                        <Send>
+                            <Source>n_WebCache</Source>
+                            <Destination>n_0</Destination>
+                            <Packet_out>p_0</Packet_out>
+                            <Time_out>t_0</Time_out>
+                        </Send>
+                    </Expression>
+                    <Expression>
+                        <IsInternal>
+                            <FieldOf>
+<Unit>p_0</Unit>
+<Field>IP_DST</Field>
+                            </FieldOf>
+                        </IsInternal>
+                    </Expression>
+                </And>
+            </AntecedentExpression>
+            <ConsequentExpression>
+                <Exist>
+                    <Unit>n_1</Unit>
+                    <Unit>p_1</Unit>
+                    <Unit>t_1</Unit>
+                    <Expression>
+                        <And>
+                            <Expression>
+<Recv>
+    <Source>n_1</Source>
+    <Destination>n_WebCache</Destination>
+    <Packet_in>p_1</Packet_in>
+    <Time_in>t_1</Time_in>
+</Recv>
+                            </Expression>
+                            <Expression>
+<LessThan>
+    <LeftExpression>
+        <Param>t_1</Param>
+    </LeftExpression>
+    <RightExpression>
+        <Param>t_0</Param>
+    </RightExpression>
+</LessThan>
+                            </Expression>
+                            <Expression>
+<Not>
+    <Expression>
+        <IsInternal>
+            <FieldOf>
+                <Unit>p_1</Unit>
+                <Field>IP_SRC</Field>
+            </FieldOf>
+        </IsInternal>
+    </Expression>
+</Not>
+                            </Expression>
+                            <Expression>
+<Equal>
+    <LeftExpression>
+        <FieldOf>
+            <Unit>p_0</Unit>
+            <Field>IP_SRC</Field>
+        </FieldOf>
+    </LeftExpression>
+    <RightExpression>
+        <FieldOf>
+            <Unit>p_1</Unit>
+            <Field>IP_SRC</Field>
+        </FieldOf>
+    </RightExpression>
+</Equal>
+                            </Expression>
+                            <Expression>
+<Equal>
+    <LeftExpression>
+        <FieldOf>
+            <Unit>p_0</Unit>
+            <Field>IP_DST</Field>
+        </FieldOf>
+    </LeftExpression>
+    <RightExpression>
+        <FieldOf>
+            <Unit>p_1</Unit>
+            <Field>IP_DST</Field>
+        </FieldOf>
+    </RightExpression>
+</Equal>
+                            </Expression>
+                            <Expression>
+<Equal>
+    <LeftExpression>
+        <FieldOf>
+            <Unit>p_0</Unit>
+            <Field>PORT_SRC</Field>
+        </FieldOf>
+    </LeftExpression>
+    <RightExpression>
+        <FieldOf>
+            <Unit>p_1</Unit>
+            <Field>PORT_SRC</Field>
+        </FieldOf>
+    </RightExpression>
+</Equal>
+                            </Expression>
+                            <Expression>
+<Equal>
+    <LeftExpression>
+        <FieldOf>
+            <Unit>p_0</Unit>
+            <Field>PORT_DST</Field>
+        </FieldOf>
+    </LeftExpression>
+    <RightExpression>
+        <FieldOf>
+            <Unit>p_1</Unit>
+            <Field>PORT_DST</Field>
+        </FieldOf>
+    </RightExpression>
+</Equal>
+                            </Expression>
+                            <Expression>
+<Equal>
+    <LeftExpression>
+        <FieldOf>
+            <Unit>p_0</Unit>
+            <Field>TRANSPORT_PROTOCOL</Field>
+        </FieldOf>
+    </LeftExpression>
+    <RightExpression>
+        <FieldOf>
+            <Unit>p_1</Unit>
+            <Field>TRANSPORT_PROTOCOL</Field>
+        </FieldOf>
+    </RightExpression>
+</Equal>
+                            </Expression>
+                            <Expression>
+<Equal>
+    <LeftExpression>
+        <FieldOf>
+            <Unit>p_0</Unit>
+            <Field>APPLICATION_PROTOCOL</Field>
+        </FieldOf>
+    </LeftExpression>
+    <RightExpression>
+        <FieldOf>
+            <Unit>p_1</Unit>
+            <Field>APPLICATION_PROTOCOL</Field>
+        </FieldOf>
+    </RightExpression>
+</Equal>
+                            </Expression>
+                            <Expression>
+<Equal>
+    <LeftExpression>
+        <FieldOf>
+            <Unit>p_0</Unit>
+            <Field>L7DATA</Field>
+        </FieldOf>
+    </LeftExpression>
+    <RightExpression>
+        <FieldOf>
+            <Unit>p_1</Unit>
+            <Field>L7DATA</Field>
+        </FieldOf>
+    </RightExpression>
+</Equal>
+                            </Expression>
+                        </And>
+                    </Expression>
+                </Exist>
+            </ConsequentExpression>
+        </Implies>
+    </LogicalExpressionResult>
+</Result>

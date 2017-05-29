@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Result xmlns="http://www.example.org/LogicalExpressions" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.example.org/LogicalExpressions LogicalExpressions.xsd">
+    <TableSize>1</TableSize>
+    <DataDriven>false</DataDriven>
+    <TableFields>ApplicationProtocol</TableFields>
+    <Node Name="n_0"/>
+    <Node Name="n_1"/>
+    <Node Name="n_WebServer"/>
+    <Packet Name="p_0"/>
+    <Packet Name="p_1"/>
+    <Time Name="t_0"/>
+    <Time Name="t_1"/>
+    <LogicalExpressionResult>
+        <Implies>
+            <AntecedentExpression>
+                <Send>
+                    <Source>n_WebServer</Source>
+                    <Destination>n_0</Destination>
+                    <Packet_out>p_0</Packet_out>
+                    <Time_out>t_0</Time_out>
+                </Send>
+            </AntecedentExpression>
+            <ConsequentExpression>
+                <Exist>
+                    <Unit>n_1</Unit>
+                    <Unit>p_1</Unit>
+                    <Unit>t_1</Unit>
+                    <Expression>
+                        <And>
+                            <Expression>
+<Recv>
+    <Source>n_1</Source>
+    <Destination>n_WebServer</Destination>
+    <Packet_in>p_1</Packet_in>
+    <Time_in>t_1</Time_in>
+</Recv>
+                            </Expression>
+                            <Expression>
+<LessThan>
+    <LeftExpression>
+        <Param>t_1</Param>
+    </LeftExpression>
+    <RightExpression>
+        <Param>t_0</Param>
+    </RightExpression>
+</LessThan>
+                            </Expression>
+                            <Expression>
+<Equal>
+    <LeftExpression>
+        <FieldOf>
+            <Unit>p_1</Unit>
+            <Field>APPLICATION_PROTOCOL</Field>
+        </FieldOf>
+    </LeftExpression>
+    <RightExpression>
+        <Param>HTTP_REQUEST</Param>
+    </RightExpression>
+</Equal>
+                            </Expression>
+                            <Expression>
+<MatchEntry>
+    <Value>
+        <Unit>p_1</Unit>
+        <Field>L7DATA</Field>
+    </Value>
+</MatchEntry>
+                            </Expression>
+                            <Expression>
+<Equal>
+    <LeftExpression>
+        <FieldOf>
+            <Unit>p_0</Unit>
+            <Field>IP_SRC</Field>
+        </FieldOf>
+    </LeftExpression>
+    <RightExpression>
+        <FieldOf>
+            <Unit>p_1</Unit>
+            <Field>IP_DST</Field>
+        </FieldOf>
+    </RightExpression>
+</Equal>
+                            </Expression>
+                            <Expression>
+<Equal>
+    <LeftExpression>
+        <FieldOf>
+            <Unit>p_0</Unit>
+            <Field>PORT_SRC</Field>
+        </FieldOf>
+    </LeftExpression>
+    <RightExpression>
+        <FieldOf>
+            <Unit>p_1</Unit>
+            <Field>PORT_DST</Field>
+        </FieldOf>
+    </RightExpression>
+</Equal>
+                            </Expression>
+                            <Expression>
+<Equal>
+    <LeftExpression>
+        <FieldOf>
+            <Unit>p_0</Unit>
+            <Field>IP_DST</Field>
+        </FieldOf>
+    </LeftExpression>
+    <RightExpression>
+        <FieldOf>
+            <Unit>p_1</Unit>
+            <Field>IP_SRC</Field>
+        </FieldOf>
+    </RightExpression>
+</Equal>
+                            </Expression>
+                            <Expression>
+<Equal>
+    <LeftExpression>
+        <FieldOf>
+            <Unit>p_0</Unit>
+            <Field>PORT_DST</Field>
+        </FieldOf>
+    </LeftExpression>
+    <RightExpression>
+        <FieldOf>
+            <Unit>p_1</Unit>
+            <Field>PORT_SRC</Field>
+        </FieldOf>
+    </RightExpression>
+</Equal>
+                            </Expression>
+                            <Expression>
+<Equal>
+    <LeftExpression>
+        <FieldOf>
+            <Unit>p_0</Unit>
+            <Field>APPLICATION_PROTOCOL</Field>
+        </FieldOf>
+    </LeftExpression>
+    <RightExpression>
+        <Param>HTTP_RESPONSE</Param>
+    </RightExpression>
+</Equal>
+                            </Expression>
+                            <Expression>
+<Equal>
+    <LeftExpression>
+        <FieldOf>
+            <Unit>p_0</Unit>
+            <Field>L7DATA</Field>
+        </FieldOf>
+    </LeftExpression>
+    <RightExpression>
+        <Param>value_0</Param>
+    </RightExpression>
+</Equal>
+                            </Expression>
+                            <Expression>
+<Equal>
+    <LeftExpression>
+        <FieldOf>
+            <Unit>p_0</Unit>
+            <Field>TRANSPORT_PROTOCOL</Field>
+        </FieldOf>
+    </LeftExpression>
+    <RightExpression>
+        <FieldOf>
+            <Unit>p_1</Unit>
+            <Field>TRANSPORT_PROTOCOL</Field>
+        </FieldOf>
+    </RightExpression>
+</Equal>
+                            </Expression>
+                        </And>
+                    </Expression>
+                </Exist>
+            </ConsequentExpression>
+        </Implies>
+    </LogicalExpressionResult>
+</Result>

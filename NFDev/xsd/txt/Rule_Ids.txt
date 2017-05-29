@@ -1,0 +1,6 @@
+Rule_0:
+
+( send(n_Ids,n_0,p_0,t_0) ==> 
+	 E(n_1, p_1, t_1 | 
+		( recv(n_1,n_Ids,p_1,t_1) && (t_1 < t_0) && ((p_1.APPLICATION_PROTOCOL == HTTP_REQUEST) || (p_1.APPLICATION_PROTOCOL == HTTP_RESPONSE)) && !(matchEnty(p_1.L7DATA)) && (p_0.IP_SRC == p_1.IP_SRC) && (p_0.IP_DST == p_1.IP_DST) && (p_0.PORT_SRC == p_1.PORT_SRC) && (p_0.PORT_DST == p_1.PORT_DST) && (p_0.TRANSPORT_PROTOCOL == p_1.TRANSPORT_PROTOCOL) && (p_0.APPLICATION_PROTOCOL == p_1.APPLICATION_PROTOCOL) && (p_0.L7DATA == p_1.L7DATA))))
+

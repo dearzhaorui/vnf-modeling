@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" 
+		targetNamespace="http://www.example.org/LogicalExpressions" 
+		xmlns:tns="http://www.example.org/LogicalExpressions" 
+		elementFormDefault="qualified">
+		
+	<annotation>
+		<documentation>LO stands for Logical Operator,LU stands for Logical Unit,LF stands for Logical Function</documentation>
+	</annotation>	
+		
+	<element name="Result" type="tns:ExpressionResult">
+		<key name="PacketNameKey" >
+			<selector xpath="tns:Packet"></selector>
+			<field xpath="@Name"></field>
+		</key>
+		
+		<key name="NodeNameKey">
+			<selector xpath="tns:Node"></selector>
+			<field xpath="@Name"></field>
+		</key>
+		
+		<key name="TimeNameKey">
+			<selector xpath="tns:Time"></selector>
+			<field xpath="@Name"></field>
+		</key>
+		
+		<!-- keyref name="PacketRecvRef" refer="tns:PacketNameKey">
+			<selector xpath=".//tns:Recv"></selector>
+			<field xpath="@Packet_in"></field>
+		</keyref>
+		
+		<keyref name="PacketSendRef" refer="tns:PacketNameKey">
+			<selector xpath=".//tns:Send"></selector>
+			<field xpath="@Packet_out"></field>
+		</keyref-->
+	
+	</element>
+
+	<complexType name="LogicalOperator" abstract="true">
+		<attribute name="OperatorType"></attribute>
+	</complexType>
+	
+	<complexType name="LogicalUnit" abstract="true">
+		<attribute name="Name" type="string" use="required"></attribute>
+	</complexType>
+
+	<complexType name="LogicalFunction" abstract="true">
+		<attribute name="Name" type="string"></attribute>
+	</complexType>
+
+    <complexType name="ExpressionObject">
+    	<choice>
+		  	<element name="And" type="tns:LO_And"></element>
+			<element name="Or" type="tns:LO_Or"></element>
+			<element name="Not" type="tns:LO_Not"></element>
+			<element name="Equal" type="tns:LO_Equals"></element>
+			<element name="GreaterThan" type="tns:LO_Greater_Than"></element>
+			<element name="GreaterThanOrEqual" type="tns:LO_Greater_Than_or_Equal"></element>
+			<element name="LessThan" type="tns:LO_Less_Than"></element>
+			<element name="LessThanOrEqual" type="tns:LO_Less_Than_or_Equal"></element>
+			<element name="Implies" type="tns:LO_Implies"></element>
+			<element name="Exist" type="tns:LO_Exist"></element>
+			<element name="Send" type="tns:LF_Send"></element>
+			<element name="Recv" type="tns:LF_Recv"></element>
+			<element name="MatchEntry" type="tns:LF_MatchEntry"></element>
+			<element name="FieldOf" type="tns:LF_FieldOf"></element>
+			<element name="IsInternal" type="tns:LF_IsInternal"></element>
+			<element name="Param" type="string"></element>
+    	</choice>
+    </complexType>
+	
+	<complexType name="ExpressionResult">	
+		<sequence>
+			<element name="TableSize" type="int"></element>
+			<element name="DataDriven" type="boolean"></element>
+			<element name="TableFields" type="string" minOccurs="0" maxOccurs="unbounded"></element>
+			<choice maxOccurs="unbounded">
+				<element name="Node" type="tns:LU_Node"></element>
+				<element name="Packet" type="tns:LU_Packet"></element>
+				<element name="Time" type="tns:LU_Time"></element>
+			</choice>
+			<element name="LogicalExpressionResult" maxOccurs="unbounded" type="tns:ExpressionObject"></element>
+		</sequence>
+	</complexType>
+
+    <complexType name="LO_And">
+    	<complexContent>
+    		<extension base="tns:LogicalOperator">
+    			<sequence>
+    				<element name="Expression" type="tns:ExpressionObject" minOccurs="2" maxOccurs="unbounded"></element>
+    			</sequence>
+    		</extension>
+    	</complexContent>
+    </complexType> 
+    
+     <complexType name="LO_Or">
+    	<complexContent>
+    		<extension base="tns:LogicalOperator">
+    			<sequence>
+    				<element name="Expression" type="tns:ExpressionObject" minOccurs="2" maxOccurs="unbounded"></element>
+    			</sequence>
+    		</extension>
+    	</complexContent>
+    </complexType> 
+    
+     <complexType name="LO_Not">
+     	<complexContent>
+    		<extension base="tns:LogicalOperator">
+    			<sequence>
+    				<element name="Expression" type="tns:ExpressionObject"></element>
+    			</sequence>
+    		</extension>
+    	</complexContent>
+    </complexType> 
+    
+     <complexType name="LO_Equals">
+    	 <complexContent>
+    		<extension base="tns:LogicalOperator">
+    			<sequence>
+    				<element name="LeftExpression" type="tns:ExpressionObject"></element>
+    				<element name="RightExpression" type="tns:ExpressionObject"></element>
+    			</sequence>
+    		</extension>
+    	</complexContent>
+    </complexType> 
+    
+     <complexType name="LO_Greater_Than">
+    	<complexContent>
+    		<extension base="tns:LogicalOperator">
+    			<sequence>
+    				<element name="LeftExpression" type="tns:ExpressionObject"></element>
+    				<element name="RightExpression" type="tns:ExpressionObject"></element>
+    			</sequence>
+    		</extension>
+    	</complexContent>
+    </complexType> 
+    
+    <complexType name="LO_Greater_Than_or_Equal">
+    	<complexContent>
+    		<extension base="tns:LogicalOperator">
+    			<sequence>
+    				<element name="LeftExpression" type="tns:ExpressionObject"></element>
+    				<element name="RightExpression" type="tns:ExpressionObject"></element>
+    			</sequence>
+    		</extension>
+    	</complexContent>
+    </complexType>
+    
+   	<complexType name="LO_Less_Than">
+    	<complexContent>
+    		<extension base="tns:LogicalOperator">
+    			<sequence>
+    				<element name="LeftExpression" type="tns:ExpressionObject"></element>
+    				<element name="RightExpression" type="tns:ExpressionObject"></element>
+    			</sequence>
+    		</extension>
+    	</complexContent>
+    </complexType>
+    
+    <complexType name="LO_Less_Than_or_Equal">
+    	<complexContent>
+    		<extension base="tns:LogicalOperator">
+    			<sequence>
+    				<element name="LeftExpression" type="tns:ExpressionObject"></element>
+    				<element name="RightExpression" type="tns:ExpressionObject"></element>
+    			</sequence>
+    		</extension>
+    	</complexContent>
+    </complexType>
+    
+    <complexType name="LO_Implies">
+    	<complexContent>
+    		<extension base="tns:LogicalOperator">
+    			<sequence>
+    				<element name="AntecedentExpression" type="tns:ExpressionObject"></element>
+    				<element name="ConsequentExpression" type="tns:ExpressionObject"></element>
+    			</sequence>
+    		</extension>
+    	</complexContent>	
+    </complexType>
+    
+    <complexType name="LO_Exist">
+    	<complexContent>
+    		<extension base="tns:LogicalOperator">
+    			<sequence>
+    				<element name="Unit" type="string" maxOccurs="unbounded"></element>
+    				<element name="Expression" type="tns:ExpressionObject"></element>
+    			</sequence>
+    		</extension>
+    	</complexContent>   	
+    </complexType>
+      
+    <complexType name="LU_Node"> 
+    	<complexContent>
+    		<extension base="tns:LogicalUnit">
+    			<attribute name="Value" type="string"></attribute>    		
+    		</extension>
+    	</complexContent>	
+    </complexType>  
+    
+    <complexType name="LU_Packet">	
+    	<complexContent>
+    		<extension base="tns:LogicalUnit">
+    			<attribute name="ETH_SRC" type="string"></attribute>
+    			<attribute name="ETH_DST" type="string"></attribute>
+    			<attribute name="IP_SRC" type="string"></attribute>
+				<attribute name="IP_DST" type="string"></attribute>
+				<attribute name="PORT_SRC" type="string"></attribute>
+				<attribute name="PORT_DST" type="string"></attribute>  
+				<attribute name="TRANSPORT_PROTOCOL" type="string"></attribute>
+				<attribute name="APPLICATION_PROTOCOL" type="string"></attribute>
+				<attribute name="L7DATA"></attribute>
+    		</extension>
+    	</complexContent>			 		
+    </complexType> 
+    
+    <complexType name="LU_Time">
+    	<complexContent>
+    		<extension base="tns:LogicalUnit">
+    			<attribute name="Value" type="string"></attribute>
+    		</extension>
+    	</complexContent>
+    </complexType>
+    
+    <complexType name="LF_Send"> 
+    	<complexContent>
+    		<extension base="tns:LogicalFunction">
+    			<sequence>
+					<element name="Source" type="string"></element>
+					<element name="Destination" type="string"></element>
+					<element name="Packet_out" type="string"></element>
+					<element name="Time_out" type="string"></element>
+				</sequence>
+    		</extension>
+    	</complexContent>
+    
+	
+    </complexType>  
+    
+    <complexType name="LF_Recv">   	
+    	<complexContent>
+    		<extension base="tns:LogicalFunction">
+	    		<sequence>
+					<element name="Source" type="string"></element>
+					<element name="Destination" type="string"></element>
+					<element name="Packet_in" type="string"></element>
+					<element name="Time_in" type="string"></element>
+				</sequence>
+    		</extension>
+    	</complexContent>
+    
+		 	
+    </complexType>
+    
+    <complexType name="LF_MatchEntry">
+    	<complexContent>
+    		<extension base="tns:LogicalFunction">
+	    		<sequence>
+	    			<element name="Value" type="tns:LF_FieldOf" maxOccurs="unbounded" ></element>
+				</sequence>   
+    		</extension>
+    	</complexContent>
+				 
+    </complexType>
+  
+   	<complexType name="LF_FieldOf">
+   		<complexContent>
+   			<extension base="tns:LogicalFunction">
+	   			<sequence>
+					<element name="Unit" type="string"></element>
+					<element name="Field" type="string"></element>		
+				</sequence>
+   			</extension>
+   		</complexContent>
+		  		
+   	</complexType>
+   	
+   	<complexType name="LF_IsInternal">
+   		<complexContent>
+   			<extension base="tns:LogicalFunction">
+   				<sequence>
+   					<element name="FieldOf" type="tns:LF_FieldOf"></element>
+   				</sequence>
+   			</extension>
+   		</complexContent>
+   		
+   	</complexType>
+ 	   
+</schema>

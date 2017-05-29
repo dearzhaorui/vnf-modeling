@@ -1,0 +1,13 @@
+Rule_0:
+
+(( send(n_Nat,n_0,p_0,t_0) && !(isInternal(p_0.IP_DST))) ==> 
+	 E(n_1, p_1, t_1 | 
+		( recv(n_1,n_Nat,p_1,t_1) && (t_1 < t_0) && isInternal(p_1.IP_SRC) && (p_0.IP_SRC == natIp) && (p_0.PORT_SRC == new_port) && (p_0.IP_DST == p_1.IP_DST) && (p_0.PORT_DST == p_1.PORT_DST) && (p_0.TRANSPORT_PROTOCOL == p_1.TRANSPORT_PROTOCOL) && (p_0.APPLICATION_PROTOCOL == p_1.APPLICATION_PROTOCOL) && (p_0.L7DATA == p_1.L7DATA))))
+
+Rule_1:
+
+(( send(n_Nat,n_0,p_0,t_0) && isInternal(p_0.IP_DST)) ==> 
+	 E(n_1, p_1, t_1 | 
+		( recv(n_1,n_Nat,p_1,t_1) && (t_1 < t_0) && !(isInternal(p_1.IP_SRC)) &&  E(n_2, p_2, t_2 | 
+			( recv(n_2,n_Nat,p_2,t_2) && (t_2 < t_1) && isInternal(p_2.IP_SRC) && (p_1.IP_SRC == p_2.IP_DST) && (p_1.PORT_SRC == p_2.PORT_DST) && (p_1.IP_DST == natIp) && (p_1.PORT_DST == new_port) && (p_0.IP_DST == p_2.IP_SRC) && (p_0.PORT_DST == p_2.PORT_SRC))) && (p_0.IP_SRC == p_1.IP_SRC) && (p_0.PORT_SRC == p_1.PORT_SRC) && (p_0.TRANSPORT_PROTOCOL == p_1.TRANSPORT_PROTOCOL) && (p_0.APPLICATION_PROTOCOL == p_1.APPLICATION_PROTOCOL) && (p_0.L7DATA == p_1.L7DATA))))
+
